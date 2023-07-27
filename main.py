@@ -41,6 +41,16 @@ def change_word():
     timer = window.after(5000, flip_card)
 
 
+def correct():
+    global data
+    print(data)
+    data.remove(word)
+    print(data)
+    change_word()
+    saved_data = pd.DataFrame.from_dict(data)
+    saved_data.to_csv('data/words_to_learn.csv', index=False)
+
+
 # Window
 window = Tk()
 window.config(bg=BACKGROUND_COLOR)
@@ -58,7 +68,7 @@ canvas.grid(column=0, row=0, columnspan=2)
 
 # Buttons
 image_right = PhotoImage(file="images/right.png")
-button_check = Button(image=image_right, highlightthickness=0, bg=BACKGROUND_COLOR, command=change_word)
+button_check = Button(image=image_right, highlightthickness=0, bg=BACKGROUND_COLOR, command=correct)
 button_check.grid(column=1, row=1)
 
 image_wrong = PhotoImage(file="images/wrong.png")
@@ -66,8 +76,12 @@ button_wrong = Button(image=image_wrong, highlightthickness=0, bg=BACKGROUND_COL
 button_wrong.grid(column=0, row=1)
 
 # Load the Data
-data = pd.read_csv("data/french_words.csv")
-data = data.to_dict(orient="records")
+try:
+    data = pd.read_csv("data/words_to_learn.csv")
+except FileNotFoundError:
+    data = pd.read_csv("data/french_words.csv")
+finally:
+    data = data.to_dict(orient="records")
 
 start_app()
 
