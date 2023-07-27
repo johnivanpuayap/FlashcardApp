@@ -19,12 +19,14 @@ def start_app():
 
 def flip_card():
     global word
+    canvas.itemconfig(canvas_image, image=image_back_card)
     canvas.itemconfig(text_language, text=f"{'English'}")
     canvas.itemconfig(text_word, text=f"{word['English']}")
 
 
 def show_word():
     global word
+    canvas.itemconfig(canvas_image, image=image_front_card)
     canvas.itemconfig(text_language, text=f"{'French'}")
     canvas.itemconfig(text_word, text=f"{word['French']}")
 
@@ -48,7 +50,8 @@ window.config(pady=50, padx=50)
 # Card
 canvas = Canvas(width=800, height=526, bg=BACKGROUND_COLOR, highlightthickness=0)
 image_front_card = PhotoImage(file="images/card_front.png")
-canvas.create_image(400, 263, image=image_front_card)
+image_back_card = PhotoImage(file="images/card_back.png")
+canvas_image = canvas.create_image(400, 263, image=image_front_card)
 text_language = canvas.create_text(400, 150, text="French", fill="black", font=("Ariel", 40, 'italic'))
 text_word = canvas.create_text(400, 263, text="trouve", fill="black", font=("Ariel", 60, 'bold'))
 canvas.grid(column=0, row=0, columnspan=2)
