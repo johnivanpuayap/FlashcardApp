@@ -3,7 +3,7 @@ import pandas as pd
 import random
 
 BACKGROUND_COLOR = "#B1DDC6"
-word = ""
+word = {}
 data = {}
 timer = None
 count = 0
