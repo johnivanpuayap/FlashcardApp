@@ -5,18 +5,38 @@ import random
 BACKGROUND_COLOR = "#B1DDC6"
 word = ""
 data = {}
+timer = None
 
 
-def show_word():
-    global word
-    canvas.itemconfig(text_word, text=f"{word['French']}")
-
-
-def change_word():
+def start_app():
+    global timer
     global word
     global data
     word = random.choice(data)
     show_word()
+    timer = window.after(5000, flip_card)
+
+
+def flip_card():
+    global word
+    canvas.itemconfig(text_language, text=f"{'English'}")
+    canvas.itemconfig(text_word, text=f"{word['English']}")
+
+
+def show_word():
+    global word
+    canvas.itemconfig(text_language, text=f"{'French'}")
+    canvas.itemconfig(text_word, text=f"{word['French']}")
+
+
+def change_word():
+    global timer
+    global word
+    global data
+    window.after_cancel(timer)
+    word = random.choice(data)
+    show_word()
+    timer = window.after(5000, flip_card)
 
 
 # Window
@@ -29,7 +49,7 @@ window.config(pady=50, padx=50)
 canvas = Canvas(width=800, height=526, bg=BACKGROUND_COLOR, highlightthickness=0)
 image_front_card = PhotoImage(file="images/card_front.png")
 canvas.create_image(400, 263, image=image_front_card)
-text_french = canvas.create_text(400, 150, text="French", fill="black", font=("Ariel", 40, 'italic'))
+text_language = canvas.create_text(400, 150, text="French", fill="black", font=("Ariel", 40, 'italic'))
 text_word = canvas.create_text(400, 263, text="trouve", fill="black", font=("Ariel", 60, 'bold'))
 canvas.grid(column=0, row=0, columnspan=2)
 
@@ -46,10 +66,6 @@ button_wrong.grid(column=0, row=1)
 data = pd.read_csv("data/french_words.csv")
 data = data.to_dict(orient="records")
 
-# Choose a random data
-word = random.choice(data)
-
-# Display the data
-show_word()
+start_app()
 
 window.mainloop()
